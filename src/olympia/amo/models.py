@@ -11,6 +11,7 @@ import multidb.pinning
 from django_statsd.clients import statsd
 
 import olympia.lib.queryset_transform as queryset_transform
+from olympia.translations.hold import save_translations
 
 from . import search
 
@@ -388,6 +389,11 @@ class ModelBase(SearchMixin, caching.base.CachingMixin, models.Model):
         if signal:
             models.signals.post_save.send(sender=cls, instance=self,
                                           created=False)
+
+    def save(self, **kwargs):
+        if hasattr(self._meta, 'translated_fields'):
+            save_translations(id(self))
+        return super(ModelBase, self).save(**kwargs)
 
 
 def manual_order(qs, pks, pk_name='id'):
