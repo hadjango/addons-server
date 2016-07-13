@@ -951,14 +951,13 @@ class WithDynamicEndpoints(TestCase):
             is_class = False
         if is_class:
             view = view.as_view()
-        dynamic_urls.urlpatterns = django_urls.patterns(
-            '',
-            django_urls.url(url_regex, view),
-        )
+
+        dynamic_urls.urlpatterns = [django_urls.url(url_regex, view)]
+
         self.addCleanup(self._clean_up_dynamic_urls)
 
     def _clean_up_dynamic_urls(self):
-        dynamic_urls.urlpatterns = None
+        dynamic_urls.urlpatterns = []
 
 
 def get_temp_filename():
