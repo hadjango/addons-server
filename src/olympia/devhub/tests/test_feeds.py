@@ -73,7 +73,7 @@ class TestActivity(HubTest):
         r = self.client.get(reverse('devhub.addons'))
         doc = pq(r.content)
         assert len(doc('li.item')) == 4
-        assert doc('.subscribe-feed').attr('href')[:-32] == (
+        assert doc('.subscribe-feed').attr('href')[:-36] == (
             reverse('devhub.feed_all') + '?privaterss=')
 
     def test_items(self):

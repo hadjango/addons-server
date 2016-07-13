@@ -575,7 +575,7 @@ class FileUpload(ModelBase):
         db_table = 'file_uploads'
 
     def __unicode__(self):
-        return self.uuid
+        return unicode(self.uuid)
 
     def save(self, *args, **kw):
         if self.validation:
