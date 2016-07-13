@@ -18,7 +18,6 @@ from django.utils.encoding import smart_str, force_text
 import commonware
 from cache_nuggets.lib import memoize
 from django_statsd.clients import statsd
-from uuidfield.fields import UUIDField
 
 from olympia import amo
 from olympia.amo.models import OnChangeMixin, ModelBase, UncachedManagerBase
@@ -552,7 +551,7 @@ def track_file_status_change(file_):
 
 class FileUpload(ModelBase):
     """Created when a file is uploaded for validation/submission."""
-    uuid = UUIDField(auto=True)
+    uuid = models.UUIDField(default=uuid.uuid4, editable=False)
     path = models.CharField(max_length=255, default='')
     name = models.CharField(max_length=255, default='',
                             help_text="The user's original filename")

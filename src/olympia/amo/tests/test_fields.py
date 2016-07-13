@@ -27,7 +27,7 @@ class SeparatedValuesFieldTestCase(TestCase):
     def test_url_field(self):
         field = SeparatedValuesField(forms.URLField)
         assert (field.clean(u'http://hy.fr/,,http://yo.lo') ==
-                u'http://hy.fr/, http://yo.lo/')
+                u'http://hy.fr/, http://yo.lo')
 
     def test_alt_separator(self):
         self.field = SeparatedValuesField(forms.EmailField, separator='#')
@@ -53,7 +53,7 @@ class HttpHttpsOnlyURLFieldTestCase(TestCase):
             self.field.clean(u'ftps://foo.com/')
 
     def test_no_scheme_assumes_http(self):
-        assert self.field.clean(u'foo.com') == 'http://foo.com/'
+        assert self.field.clean(u'foo.com') == 'http://foo.com'
 
     def test_http_scheme(self):
         assert self.field.clean(u'http://foo.com/') == u'http://foo.com/'

@@ -1,7 +1,8 @@
-from copy import copy
-from datetime import datetime
 import json
 import string
+import uuid
+from copy import copy
+from datetime import datetime
 
 from django.apps import apps
 from django.conf import settings
@@ -11,7 +12,6 @@ from django.utils.translation import ugettext as _
 
 import commonware.log
 import jinja2
-from uuidfield.fields import UUIDField
 
 from olympia import amo
 from olympia.amo.models import ModelBase, ManagerBase
@@ -25,11 +25,12 @@ from olympia.users.helpers import user_link
 from olympia.users.models import UserProfile
 from olympia.versions.models import Version
 
+
 log = commonware.log.getLogger('devhub')
 
 
 class RssKey(models.Model):
-    key = UUIDField(db_column='rsskey', auto=True, unique=True)
+    key = models.UUIDField(db_column='rsskey', default=uuid.uuid4, unique=True)
     addon = models.ForeignKey(Addon, null=True, unique=True)
     user = models.ForeignKey(UserProfile, null=True, unique=True)
     created = models.DateField(default=datetime.now)
