@@ -618,7 +618,7 @@ def _get_created(created):
                         random.randint(0, 59))  # Seconds
 
 
-def addon_factory(status=amo.STATUS_PUBLIC, version_kw={}, file_kw={}, **kw):
+def addon_factory(status=amo.STATUS_PUBLIC, version_kw=None, file_kw=None, **kw):
     # Disconnect signals until the last save.
     post_save.disconnect(addon_update_search_index, sender=Addon,
                          dispatch_uid='addons.search.index')
@@ -651,32 +651,38 @@ def addon_factory(status=amo.STATUS_PUBLIC, version_kw={}, file_kw={}, **kw):
     # Save 1.
     if type_ == amo.ADDON_PERSONA:
         # Personas need to start life as an extension for versioning.
-        a = Addon.objects.create(type=amo.ADDON_EXTENSION, **kwargs)
+        addon = Addon.objects.create(type=amo.ADDON_EXTENSION, **kwargs)
     else:
-        a = Addon.objects.create(type=type_, **kwargs)
-    version = version_factory(file_kw, addon=a, **version_kw)  # Save 2.
-    a.update_version()
-    a.status = status
+        addon = Addon.objects.create(type=type_, **kwargs)
+
+    # Save 2.
+    version = version_factory(file_kw, addon=addon, **(version_kw or {}))
+    addon.update_version()
+    addon.status = status
     if type_ == amo.ADDON_PERSONA:
-        a.type = type_
-        persona_id = persona_id if persona_id is not None else a.id
-        Persona.objects.create(addon=a, popularity=a.weekly_downloads,
-                               persona_id=persona_id)  # Save 3.
+        addon.type = type_
+        persona_id = persona_id if persona_id is not None else addon.id
+
+        # Save 3.
+        Persona.objects.create(
+            addon=addon, popularity=addon.weekly_downloads,
+            persona_id=persona_id)
 
     for tag in tags:
-        Tag(tag_text=tag).save_tag(a)
+        Tag(tag_text=tag).save_tag(addon)
 
     # Put signals back.
     post_save.connect(addon_update_search_index, sender=Addon,
                       dispatch_uid='addons.search.index')
 
-    a.save()  # Save 4.
+    # Save 4.
+    addon.save()
 
     if 'nomination' in version_kw:
         # If a nomination date was set on the version, then it might have been
         # erased at post_save by addons.models.watch_status()
         version.save()
-    return a
+    return addon
 
 
 def collection_factory(**kw):
@@ -743,7 +749,7 @@ def user_factory(**kw):
     return user
 
 
-def version_factory(file_kw={}, **kw):
+def version_factory(file_kw=None, **kw):
     # We can't create duplicates of AppVersions, so make sure the versions are
     # not already created in fixtures (use fake versions).
     min_app_version = kw.pop('min_app_version', '4.0.99')
@@ -761,7 +767,7 @@ def version_factory(file_kw={}, **kw):
         ApplicationsVersions.objects.get_or_create(application=application,
                                                    version=v, min=av_min,
                                                    max=av_max)
-    file_factory(version=v, **file_kw)
+    file_factory(version=v, **(file_kw or {}))
     return v
 
 
