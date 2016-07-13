@@ -291,7 +291,7 @@ class Version(OnChangeMixin, ModelBase):
     @amo.cached_property(writable=True)
     def compatible_apps(self):
         """Get a mapping of {APP: ApplicationVersion}."""
-        avs = self.apps.select_related('versions', 'license')
+        avs = self.apps.select_related('version')
         return self._compat_map(avs)
 
     @amo.cached_property
