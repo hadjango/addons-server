@@ -3,8 +3,6 @@ from django.template import loader
 from django.template.response import SimpleTemplateResponse
 from django.template.backends.django import Template
 
-from olympia.amo.utils import render
-
 
 # We monkeypatch SimpleTemplateResponse.rendered_content to use our jinja
 # rendering pipeline (most of the time). The exception is the admin app, where

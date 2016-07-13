@@ -618,7 +618,8 @@ def _get_created(created):
                         random.randint(0, 59))  # Seconds
 
 
-def addon_factory(status=amo.STATUS_PUBLIC, version_kw=None, file_kw=None, **kw):
+def addon_factory(
+        status=amo.STATUS_PUBLIC, version_kw=None, file_kw=None, **kw):
     version_kw = version_kw or {}
 
     # Disconnect signals until the last save.

@@ -20,7 +20,7 @@ from olympia.amo import messages
 from olympia.amo.decorators import (
     json_view, login_required, post_required, restricted_content)
 from olympia.amo import helpers
-from olympia.amo.utils import render, send_mail, paginate
+from olympia.amo.utils import render, paginate, send_mail as amo_send_mail
 from olympia.access import acl
 from olympia.addons.decorators import addon_view_factory
 from olympia.addons.models import Addon
@@ -36,8 +36,9 @@ addon_view = addon_view_factory(qs=Addon.objects.valid)
 
 def send_mail(template, subject, emails, context, perm_setting):
     template = loader.get_template(template)
-    send_mail(subject, template.render(Context(context, autoescape=False)),
-              recipient_list=emails, perm_setting=perm_setting)
+    amo_send_mail(
+        subject, template.render(Context(context, autoescape=False)),
+        recipient_list=emails, perm_setting=perm_setting)
 
 
 @addon_view
