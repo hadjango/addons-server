@@ -9,11 +9,11 @@ from django.core.cache import cache
 from django.db.models import Q, signals as db_signals
 from django.db.transaction import non_atomic_requests
 from django.http import JsonResponse
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404
 from django.utils.cache import patch_cache_control
 from django.utils.encoding import smart_str
 
-from olympia.amo.utils import sorted_groupby
+from olympia.amo.utils import sorted_groupby, render
 from olympia.versions.compare import version_int
 
 from .models import (

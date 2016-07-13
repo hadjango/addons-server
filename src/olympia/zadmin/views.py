@@ -11,7 +11,7 @@ from django.core.cache import cache
 from django.core.exceptions import PermissionDenied
 from django.core.files.storage import default_storage as storage
 from django.db.models import Q
-from django.shortcuts import get_object_or_404, redirect, render
+from django.shortcuts import get_object_or_404, redirect
 from django.utils.encoding import smart_str
 from django.views import debug
 from django.views.decorators.cache import never_cache
@@ -28,7 +28,7 @@ from olympia.amo.decorators import (
     any_permission_required, json_view, login_required, post_required)
 from olympia.amo.mail import DevEmailBackend
 from olympia.amo.urlresolvers import reverse
-from olympia.amo.utils import HttpResponseSendFile, chunked
+from olympia.amo.utils import HttpResponseSendFile, chunked, render
 from olympia.bandwagon.models import Collection
 from olympia.compat.models import AppCompat, CompatTotals
 from olympia.devhub.models import ActivityLog

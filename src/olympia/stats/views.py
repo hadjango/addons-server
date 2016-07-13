@@ -15,7 +15,7 @@ from django.core.files.storage import get_storage_class
 from django.db import connection
 from django.db.models import Avg, Count, Q, Sum
 from django.db.transaction import non_atomic_requests
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404
 from django.utils.cache import add_never_cache_headers, patch_cache_control
 from django.utils.datastructures import SortedDict
 
@@ -28,7 +28,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from olympia import amo
-from olympia.amo.utils import DecimalJSONEncoder
+from olympia.amo.utils import DecimalJSONEncoder, render
 from olympia.access import acl
 from olympia.addons.decorators import addon_view_factory
 from olympia.addons.models import Addon

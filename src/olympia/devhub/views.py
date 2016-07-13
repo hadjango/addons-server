@@ -13,7 +13,7 @@ from django.core.exceptions import PermissionDenied
 from django.core.files.storage import default_storage as storage
 from django.db import transaction
 from django.db.models import Count
-from django.shortcuts import get_object_or_404, redirect, render
+from django.shortcuts import get_object_or_404, redirect
 from django.template import Context, loader
 from django.utils.http import urlquote
 from django.utils.translation import ugettext as _, ugettext_lazy as _lazy
@@ -36,7 +36,7 @@ from olympia.amo import messages
 from olympia.amo.decorators import json_view, login_required, post_required
 from olympia.amo.helpers import absolutify, urlparams
 from olympia.amo.urlresolvers import reverse
-from olympia.amo.utils import escape_all, MenuItem, send_mail
+from olympia.amo.utils import escape_all, MenuItem, send_mail, render
 from olympia.api.models import APIKey
 from olympia.applications.models import AppVersion
 from olympia.devhub.decorators import dev_required

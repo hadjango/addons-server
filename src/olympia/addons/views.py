@@ -10,8 +10,7 @@ from django import http
 from django.conf import settings
 from django.db.models import Q
 from django.db.transaction import non_atomic_requests
-from django.shortcuts import (
-    get_list_or_404, get_object_or_404, redirect, render)
+from django.shortcuts import get_list_or_404, get_object_or_404, redirect
 from django.utils.translation import (
     trans_real as translation, ugettext as _, ugettext_lazy as _lazy)
 from django.views.decorators.cache import cache_control
@@ -35,7 +34,7 @@ from olympia import amo
 from olympia.amo import messages
 from olympia.amo.decorators import post_required
 from olympia.amo.forms import AbuseForm
-from olympia.amo.utils import randslice, sorted_groupby
+from olympia.amo.utils import randslice, sorted_groupby, render
 from olympia.amo.models import manual_order
 from olympia.amo import urlresolvers
 from olympia.amo.urlresolvers import reverse
