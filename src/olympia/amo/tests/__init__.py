@@ -619,6 +619,8 @@ def _get_created(created):
 
 
 def addon_factory(status=amo.STATUS_PUBLIC, version_kw=None, file_kw=None, **kw):
+    version_kw = version_kw or {}
+
     # Disconnect signals until the last save.
     post_save.disconnect(addon_update_search_index, sender=Addon,
                          dispatch_uid='addons.search.index')
@@ -656,7 +658,7 @@ def addon_factory(status=amo.STATUS_PUBLIC, version_kw=None, file_kw=None, **kw)
         addon = Addon.objects.create(type=type_, **kwargs)
 
     # Save 2.
-    version = version_factory(file_kw, addon=addon, **(version_kw or {}))
+    version = version_factory(file_kw, addon=addon, **version_kw)
     addon.update_version()
     addon.status = status
     if type_ == amo.ADDON_PERSONA:
@@ -767,7 +769,8 @@ def version_factory(file_kw=None, **kw):
         ApplicationsVersions.objects.get_or_create(application=application,
                                                    version=v, min=av_min,
                                                    max=av_max)
-    file_factory(version=v, **(file_kw or {}))
+    file_kw = file_kw or {}
+    file_factory(version=v, **file_kw)
     return v
 
 
