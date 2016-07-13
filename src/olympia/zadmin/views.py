@@ -12,8 +12,8 @@ from django.core.cache import cache
 from django.core.exceptions import PermissionDenied
 from django.core.files.storage import default_storage as storage
 from django.db.models import Q
-from django.shortcuts import get_object_or_404, redirect, render
-from django.utils.encoding import smart_str
+from django.shortcuts import get_object_or_404, redirect
+from django.utils.encoding import force_bytes
 from django.views import debug
 from django.views.decorators.cache import never_cache
 
@@ -29,7 +29,7 @@ from olympia.amo.decorators import (
     any_permission_required, json_view, login_required, post_required)
 from olympia.amo.mail import DevEmailBackend
 from olympia.amo.urlresolvers import reverse
-from olympia.amo.utils import HttpResponseSendFile, chunked
+from olympia.amo.utils import HttpResponseSendFile, chunked, render
 from olympia.bandwagon.models import Collection
 from olympia.compat.models import AppCompat, CompatTotals
 from olympia.devhub.models import ActivityLog
@@ -250,8 +250,9 @@ def validation_tally_csv(request, job_id):
     job = ValidationJobTally(job_id)
     keys = ['key', 'message', 'long_message', 'type', 'addons_affected']
     for msg in job.get_messages():
-        writer.writerow([smart_str(msg[k], encoding='utf8', strings_only=True)
-                         for k in keys])
+        writer.writerow(
+            [force_bytes(msg[k], encoding='utf8', strings_only=True)
+             for k in keys])
     return resp
 
 

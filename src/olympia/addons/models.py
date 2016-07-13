@@ -31,9 +31,9 @@ from olympia.addons.utils import (
 from olympia.amo import helpers
 from olympia.amo.decorators import use_master, write
 from olympia.amo.utils import (
-    attach_trans_dict, cache_ns_key, chunked, JSONEncoder,
+    attach_trans_dict, cache_ns_key, chunked,
     no_translation, send_mail, slugify, sorted_groupby, timer, to_language,
-    urlparams, find_language)
+    urlparams, find_language, AMOJSONEncoder)
 from olympia.amo.urlresolvers import get_outgoing_url, reverse
 from olympia.files.models import File
 from olympia.files.utils import (
@@ -47,7 +47,7 @@ from olympia.users.models import UserForeignKey, UserProfile
 from olympia.versions.compare import version_int
 from olympia.versions.models import inherit_nomination, Version
 
-from . import query, signals
+from . import signals
 
 
 log = commonware.log.getLogger('z.addons')
@@ -140,7 +140,6 @@ class AddonManager(ManagerBase):
 
     def get_queryset(self):
         qs = super(AddonManager, self).get_queryset()
-        qs = qs._clone(klass=query.IndexQuerySet)
         if not self.include_deleted:
             qs = qs.exclude(status=amo.STATUS_DELETED)
         if not self.include_unlisted:
@@ -1736,7 +1735,7 @@ class Persona(caching.CachingMixin, models.Model):
     def json_data(self):
         """Persona JSON Data for Browser/extension preview."""
         return json.dumps(self.theme_data,
-                          separators=(',', ':'), cls=JSONEncoder)
+                          separators=(',', ':'), cls=AMOJSONEncoder)
 
     def authors_other_addons(self, app=None):
         """

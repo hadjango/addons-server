@@ -6,7 +6,7 @@ from django import http
 from django.conf import settings
 from django.core.exceptions import PermissionDenied
 from django.db.transaction import non_atomic_requests
-from django.shortcuts import get_object_or_404, redirect, render
+from django.shortcuts import get_object_or_404, redirect
 from django.template import Context, loader
 from django.utils.http import urlquote
 from django.utils.translation import ugettext as _
@@ -19,7 +19,8 @@ from olympia import amo
 from olympia.amo import messages
 from olympia.amo.decorators import (
     json_view, login_required, post_required, restricted_content)
-from olympia.amo import helpers, utils as amo_utils
+from olympia.amo import helpers
+from olympia.amo.utils import render, paginate, send_mail as amo_send_mail
 from olympia.access import acl
 from olympia.addons.decorators import addon_view_factory
 from olympia.addons.models import Addon
@@ -35,9 +36,9 @@ addon_view = addon_view_factory(qs=Addon.objects.valid)
 
 def send_mail(template, subject, emails, context, perm_setting):
     template = loader.get_template(template)
-    amo_utils.send_mail(subject, template.render(Context(context,
-                                                         autoescape=False)),
-                        recipient_list=emails, perm_setting=perm_setting)
+    amo_send_mail(
+        subject, template.render(Context(context, autoescape=False)),
+        recipient_list=emails, perm_setting=perm_setting)
 
 
 @addon_view
@@ -69,7 +70,7 @@ def review_list(request, addon, review_id=None, user_id=None, template=None):
         ctx['page'] = 'list'
         q = q.filter(is_latest=True)
 
-    ctx['reviews'] = reviews = amo_utils.paginate(request, q)
+    ctx['reviews'] = reviews = paginate(request, q)
     ctx['replies'] = Review.get_replies(reviews.object_list)
     if request.user.is_authenticated():
         ctx['review_perms'] = {

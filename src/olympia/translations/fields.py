@@ -28,9 +28,10 @@ class TranslatedField(models.ForeignKey):
         options = dict(null=True, to_field='id', unique=True, blank=True,
                        on_delete=models.SET_NULL)
         kwargs.update(options)
+        kwargs['to'] = self.to
         self.short = kwargs.pop('short', True)
         self.require_locale = kwargs.pop('require_locale', True)
-        super(TranslatedField, self).__init__(self.to, **kwargs)
+        super(TranslatedField, self).__init__(**kwargs)
 
     @property
     def db_column(self):
@@ -131,6 +132,9 @@ class TranslationDescriptor(related.ReverseSingleRelatedObjectDescriptor):
 
     def __set__(self, instance, value):
         lang = translation_utils.get_language()
+        if not lang:
+            translation_utils.activate(settings.LANGUAGE_CODE)
+            lang = translation_utils.get_language()
         if isinstance(value, basestring):
             value = self.translation_from_string(instance, lang, value)
         elif hasattr(value, 'items'):
