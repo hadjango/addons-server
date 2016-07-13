@@ -623,7 +623,10 @@ def check_xpi_info(xpi_info, addon=None):
             raise forms.ValidationError(
                 _("Add-on ID must be 64 characters or less."))
         if addon and addon.guid != guid:
-            raise forms.ValidationError(_("Add-on ID doesn't match add-on."))
+            msg = _(
+                "The add-on ID in your manifest.json or install.rdf (%s) "
+                "does not match the ID of your add-on on AMO (%s)")
+            raise forms.ValidationError(msg % (guid, addon.guid))
         if (not addon and
             # Non-deleted add-ons.
             (Addon.with_unlisted.filter(guid=guid).exists() or
@@ -654,7 +657,10 @@ def parse_addon(pkg, addon=None, check=True):
         parsed = parse_xpi(pkg, addon, check)
 
     if addon and addon.type != parsed['type']:
-        raise forms.ValidationError(_("<em:type> doesn't match add-on"))
+        msg = _(
+            "<em:type> in your install.rdf (%s) "
+            "does not match the type of your add-on on AMO (%s)")
+        raise forms.ValidationError(msg % (parsed['type'], addon.type))
     return parsed
 
 
@@ -949,6 +955,12 @@ def resolve_i18n_message(message, messages, locale, default_locale=None):
     :param messages: A dictionary of messages, e.g the return value
                      of `extract_translations`.
     """
+    if not message or not isinstance(message, basestring):
+        # Don't even attempt to extract invalid data.
+        # See https://github.com/mozilla/addons-server/issues/3067
+        # for more details
+        return message
+
     match = MSG_RE.match(message)
 
     if match is None:
