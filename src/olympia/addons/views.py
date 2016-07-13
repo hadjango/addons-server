@@ -287,27 +287,22 @@ class BaseFilter(object):
             return self.base_queryset.top_paid(listed=False)
 
     def filter_popular(self):
-        return (self.base_queryset.order_by('-weekly_downloads')
-                .with_index(addons='downloads_type_idx'))
+        return self.base_queryset.order_by('-weekly_downloads')
 
     def filter_downloads(self):
         return self.filter_popular()
 
     def filter_users(self):
-        return (self.base_queryset.order_by('-average_daily_users')
-                .with_index(addons='adus_type_idx'))
+        return self.base_queryset.order_by('-average_daily_users')
 
     def filter_created(self):
-        return (self.base_queryset.order_by('-created')
-                .with_index(addons='created_type_idx'))
+        return self.base_queryset.order_by('-created')
 
     def filter_updated(self):
-        return (self.base_queryset.order_by('-last_updated')
-                .with_index(addons='last_updated_type_idx'))
+        return self.base_queryset.order_by('-last_updated')
 
     def filter_rating(self):
-        return (self.base_queryset.order_by('-bayesian_rating')
-                .with_index(addons='rating_type_idx'))
+        return self.base_queryset.order_by('-bayesian_rating')
 
     def filter_hotness(self):
         return self.base_queryset.order_by('-hotness')

@@ -15,6 +15,7 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.core import validators
 from django.db import models, transaction
 from django.template import Context, loader
+from django.utils import timezone
 from django.utils.translation import ugettext as _, get_language, activate
 from django.utils.crypto import constant_time_compare
 from django.utils.datastructures import SortedDict
@@ -99,7 +100,7 @@ class UserForeignKey(models.ForeignKey):
     """
 
     def __init__(self, *args, **kw):
-        super(UserForeignKey, self).__init__(UserProfile, *args, **kw)
+        super(UserForeignKey, self).__init__('users.UserProfile', *args, **kw)
 
     def value_from_object(self, obj):
         return getattr(obj, self.name).email
@@ -131,7 +132,10 @@ class UserManager(BaseUserManager, ManagerBase):
     def create_user(self, username, email, password=None, fxa_id=None):
         # We'll send username=None when registering through FxA to try and
         # generate a username from the email.
-        user = self.model(username=username, email=email, fxa_id=fxa_id)
+        now = timezone.now()
+        user = self.model(
+            username=username, email=email, fxa_id=fxa_id,
+            last_login=now)
         if username is None:
             user.anonymize_username()
         # FxA won't set a password so don't let a user log in with one.
@@ -157,8 +161,7 @@ class UserManager(BaseUserManager, ManagerBase):
 AbstractBaseUser._meta.get_field('password').max_length = 255
 
 
-class UserProfile(OnChangeMixin, ModelBase,
-                  AbstractBaseUser):
+class UserProfile(OnChangeMixin, ModelBase, AbstractBaseUser):
     objects = UserManager()
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = ['email']
@@ -166,7 +169,7 @@ class UserProfile(OnChangeMixin, ModelBase,
     display_name = models.CharField(max_length=255, default='', null=True,
                                     blank=True)
 
-    email = models.EmailField(unique=True, null=True)
+    email = models.EmailField(unique=True, null=True, max_length=75)
 
     averagerating = models.CharField(max_length=255, blank=True, null=True)
     bio = NoLinksField(short=False)
@@ -664,7 +667,7 @@ class BlacklistedPassword(ModelBase):
 
 
 class UserHistory(ModelBase):
-    email = models.EmailField()
+    email = models.EmailField(max_length=75)
     user = models.ForeignKey(UserProfile, related_name='history')
 
     class Meta:

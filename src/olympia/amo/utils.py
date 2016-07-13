@@ -36,6 +36,7 @@ from django.utils.http import urlquote, urlunquote
 import bleach
 import html5lib
 import jinja2
+import jingo
 import pytz
 from babel import Locale
 from django_statsd.clients import statsd
@@ -53,6 +54,11 @@ from olympia.users.models import UserNotification
 from olympia.users.utils import UnsubscribeCode
 
 from . import logger_log as log
+
+
+def render(request, template, ctx=None, status=None):
+    rendered = jingo.render_to_string(request, template, ctx)
+    return http.HttpResponse(rendered, status=status)
 
 
 def days_ago(n):

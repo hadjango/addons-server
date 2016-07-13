@@ -11,7 +11,6 @@ from datetime import date, timedelta
 from django.core.cache import cache
 from django.db.transaction import non_atomic_requests
 from django.http import HttpResponse, HttpResponsePermanentRedirect
-from django.template.context import get_standard_processors
 from django.utils.decorators import method_decorator
 from django.utils.translation import ugettext as _, ugettext_lazy, get_language
 from django.utils.encoding import smart_str
@@ -20,6 +19,7 @@ import commonware.log
 import jingo
 import waffle
 from caching.base import cached_with
+from jingo import get_standard_processors
 
 from olympia import amo, legacy_api
 from olympia.addons.models import Addon, CompatOverride

@@ -1,7 +1,6 @@
 from django import http
 from django.db.models import Q
 from django.db.transaction import non_atomic_requests
-from django.shortcuts import render
 from django.utils import translation
 from django.utils.encoding import smart_str
 from django.utils.translation import ugettext as _
@@ -16,7 +15,7 @@ from olympia.browse.views import personas_listing as personas_listing_view
 from olympia.addons.models import Addon, Category
 from olympia.amo.decorators import json_view
 from olympia.amo.helpers import locale_url, urlparams
-from olympia.amo.utils import sorted_groupby
+from olympia.amo.utils import sorted_groupby, render
 from olympia.bandwagon.models import Collection
 from olympia.versions.compare import dict_from_int, version_dict, version_int
 

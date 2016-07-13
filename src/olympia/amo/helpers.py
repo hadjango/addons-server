@@ -620,7 +620,7 @@ def inline_css(bundle, media=False, debug=None):
     Added: turns relative links to absolute ones using STATIC_URL.
     """
     if debug is None:
-        debug = getattr(settings, 'TEMPLATE_DEBUG', False)
+        debug = getattr(settings, 'DEBUG', False)
 
     if debug:
         items = [_get_compiled_css_url(i)

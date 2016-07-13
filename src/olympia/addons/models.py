@@ -47,7 +47,7 @@ from olympia.users.models import UserForeignKey, UserProfile
 from olympia.versions.compare import version_int
 from olympia.versions.models import inherit_nomination, Version
 
-from . import query, signals
+from . import signals
 
 
 log = commonware.log.getLogger('z.addons')
@@ -140,7 +140,6 @@ class AddonManager(ManagerBase):
 
     def get_queryset(self):
         qs = super(AddonManager, self).get_queryset()
-        qs = qs._clone(klass=query.IndexQuerySet)
         if not self.include_deleted:
             qs = qs.exclude(status=amo.STATUS_DELETED)
         if not self.include_unlisted:

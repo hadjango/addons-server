@@ -196,8 +196,7 @@ class CollectionAddonFilter(BaseFilter):
         return order_by_translation(self.base_queryset, 'name')
 
     def filter_popular(self):
-        return (self.base_queryset.order_by('-weekly_downloads')
-                .with_index(addons='downloads_type_idx'))
+        return self.base_queryset.order_by('-weekly_downloads')
 
 
 @allow_mine

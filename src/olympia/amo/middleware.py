@@ -13,7 +13,6 @@ from django.contrib.sessions.middleware import SessionMiddleware
 from django.core.urlresolvers import is_valid_path
 from django.http import HttpResponseRedirect, HttpResponsePermanentRedirect
 from django.middleware import common
-from django.shortcuts import render
 from django.utils.cache import patch_vary_headers, patch_cache_control
 from django.utils.encoding import iri_to_uri, smart_str
 from django.utils.translation import activate
@@ -21,6 +20,7 @@ from django.utils.translation import activate
 import MySQLdb as mysql
 
 from olympia import amo
+from olympia.amo.utils import render
 from . import urlresolvers
 from .helpers import urlparams
 
