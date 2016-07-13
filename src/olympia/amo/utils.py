@@ -17,7 +17,7 @@ import urllib
 import urlparse
 
 import django.core.mail
-from django import http
+from django.http import HttpResponse, HttpResponseRedirect
 from django.conf import settings
 from django.contrib import messages
 from django.core import paginator
@@ -56,9 +56,9 @@ from olympia.users.utils import UnsubscribeCode
 from . import logger_log as log
 
 
-def render(request, template, ctx=None, status=None):
+def render(request, template, ctx=None, status=None, content_type=None):
     rendered = jingo.render_to_string(request, template, ctx)
-    return http.HttpResponse(rendered, status=status)
+    return HttpResponse(rendered, status=status, content_type=content_type)
 
 
 def days_ago(n):
@@ -601,7 +601,7 @@ def get_locale_from_lang(lang):
     return Locale.parse(translation.to_locale(lang))
 
 
-class HttpResponseSendFile(http.HttpResponse):
+class HttpResponseSendFile(HttpResponse):
 
     def __init__(self, request, path, content=None, status=None,
                  content_type='application/octet-stream', etag=None):
@@ -642,7 +642,7 @@ def redirect_for_login(request):
     # which a large number of tests don't expect
     url = '%s?to=%s' % (reverse('users.login'),
                         urlquote(request.get_full_path()))
-    return http.HttpResponseRedirect(url)
+    return HttpResponseRedirect(url)
 
 
 def cache_ns_key(namespace, increment=False):
