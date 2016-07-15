@@ -54,7 +54,7 @@ from olympia.users.models import UserProfile
 from . import dynamic_urls
 
 
-# We might now have gettext available in jinja2.env.globals when running tests.
+# We might not have gettext available in jinja2.env.globals when running tests.
 # It's only added to the globals when activating a language (which
 # is usually done in the middlewares). During tests, however, we might not be
 # running middlewares, and thus not activating a language, and thus not
