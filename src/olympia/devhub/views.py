@@ -1389,12 +1389,16 @@ def version_bounce(request, addon_id, addon, version):
 @dev_required
 def version_stats(request, addon_id, addon):
     qs = Version.objects.filter(addon=addon)
-    reviews = (qs.annotate(reviews=Count('reviews'))
-               .values('id', 'version', 'reviews'))
+    reviews = (qs.annotate(review_count=Count('reviews'))
+               .values('id', 'version', 'review_count'))
     d = dict((v['id'], v) for v in reviews)
-    files = qs.annotate(files=Count('files')).values_list('id', 'files')
-    for id, files in files:
-        d[id]['files'] = files
+    files = (qs
+        .annotate(file_count=Count('files'))
+        .values_list('id', 'file_count'))
+    for id, file_count in files:
+        # For backwards compatibility
+        d[id]['files'] = file_count
+        d[id]['reviews'] = d[id].pop('review_count')
     return d
 
 
