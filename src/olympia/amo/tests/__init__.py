@@ -746,7 +746,6 @@ class ESTestCase(TestCase):
     index_names = {key: timestamp_index(value)
                    for key, value in settings.ES_INDEXES.items()}
 
-
     @classmethod
     def setUpClass(cls):
         cls.es = amo_search.get_es(timeout=settings.ES_TIMEOUT)
