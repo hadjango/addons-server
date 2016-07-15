@@ -2,7 +2,6 @@ import calendar
 import collections
 import contextlib
 import datetime
-import decimal
 import errno
 import functools
 import itertools
@@ -23,13 +22,11 @@ from django.core import paginator
 from django.core.cache import cache
 from django.core.files.storage import (FileSystemStorage,
                                        default_storage as storage)
-from django.core.serializers import json
 from django.core.validators import validate_slug, ValidationError
 from django.forms.fields import Field
 from django.template import Context, loader
 from django.utils import translation
 from django.utils.encoding import smart_str, smart_unicode
-from django.utils.functional import Promise
 from django.utils.http import urlquote, urlunquote
 
 import bleach
@@ -44,7 +41,6 @@ from html5lib.serializer.htmlserializer import HTMLSerializer
 from jingo import get_env
 from PIL import Image
 
-from olympia import amo
 from olympia.amo import search
 from olympia.amo import ADDON_ICON_SIZES
 from olympia.amo.urlresolvers import linkify_with_outgoing, reverse

@@ -6,7 +6,6 @@ import logging
 import os
 import time
 from datetime import date, timedelta, datetime
-from types import GeneratorType
 
 from django import http
 from django.conf import settings

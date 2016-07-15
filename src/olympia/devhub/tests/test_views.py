@@ -2265,8 +2265,10 @@ class TestUploadDetail(BaseUploadTest):
         assert (doc('header h2').text() ==
                 'Validation Results for {0}_animated.png'.format(upload.uuid))
         suite = doc('#addon-validator-suite')
-        assert suite.attr('data-validateurl') == (
-            reverse('devhub.standalone_upload_detail', args=[str(upload.uuid)]))
+        expected = reverse(
+            'devhub.standalone_upload_detail',
+            args=[str(upload.uuid)])
+        assert suite.attr('data-validateurl') == expected
 
     @mock.patch('olympia.devhub.tasks.run_validator')
     def check_excluded_platforms(self, xpi, platforms, v):

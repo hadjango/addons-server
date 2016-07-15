@@ -1392,7 +1392,8 @@ def version_stats(request, addon_id, addon):
     reviews = (qs.annotate(review_count=Count('reviews'))
                .values('id', 'version', 'review_count'))
     d = dict((v['id'], v) for v in reviews)
-    files = (qs
+    files = (
+        qs
         .annotate(file_count=Count('files'))
         .values_list('id', 'file_count'))
     for id, file_count in files:
