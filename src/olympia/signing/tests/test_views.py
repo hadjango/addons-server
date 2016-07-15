@@ -435,7 +435,7 @@ class TestCheckVersion(BaseUploadVersionCase):
         response = self.get(self.url(self.guid, '3.0', upload.uuid))
         assert response.status_code == 200
         # For backwards-compatibility reasons, we return the uuid as "pk".
-        assert response.data['pk'] == upload.uuid
+        assert response.data['pk'] == str(upload.uuid)
         assert 'processed' in response.data
 
     def test_version_exists_with_pk_not_owner(self):
