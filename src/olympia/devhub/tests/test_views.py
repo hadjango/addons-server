@@ -2174,7 +2174,7 @@ class TestUpload(BaseUploadTest):
     def test_redirect(self):
         r = self.post()
         upload = FileUpload.objects.get()
-        url = reverse('devhub.upload_detail', args=[upload.uuid, 'json'])
+        url = reverse('devhub.upload_detail', args=[str(upload.uuid), 'json'])
         self.assert3xx(r, url)
 
     @mock.patch('validator.validate.validate')
@@ -2231,14 +2231,14 @@ class TestUploadDetail(BaseUploadTest):
 
         upload = FileUpload.objects.get()
         r = self.client.get(reverse('devhub.upload_detail',
-                                    args=[upload.uuid, 'json']))
+                                    args=[str(upload.uuid), 'json']))
         assert r.status_code == 200
         data = json.loads(r.content)
         assert data['validation']['errors'] == 2
         assert data['url'] == (
-            reverse('devhub.upload_detail', args=[upload.uuid, 'json']))
+            reverse('devhub.upload_detail', args=[str(upload.uuid), 'json']))
         assert data['full_report_url'] == (
-            reverse('devhub.upload_detail', args=[upload.uuid]))
+            reverse('devhub.upload_detail', args=[str(upload.uuid)]))
         assert data['processed_by_addons_linter'] is False
         # We must have tiers
         assert len(data['validation']['messages'])
@@ -2250,7 +2250,7 @@ class TestUploadDetail(BaseUploadTest):
 
         upload = FileUpload.objects.get()
         r = self.client.get(reverse('devhub.upload_detail',
-                                    args=[upload.uuid, 'json']))
+                                    args=[str(upload.uuid), 'json']))
         assert r.status_code == 200
         data = json.loads(r.content)
         assert data['processed_by_addons_linter'] is True
@@ -2259,14 +2259,14 @@ class TestUploadDetail(BaseUploadTest):
         self.post()
         upload = FileUpload.objects.filter().order_by('-created').first()
         r = self.client.get(reverse('devhub.upload_detail',
-                                    args=[upload.uuid]))
+                                    args=[str(upload.uuid)]))
         assert r.status_code == 200
         doc = pq(r.content)
         assert (doc('header h2').text() ==
                 'Validation Results for {0}_animated.png'.format(upload.uuid))
         suite = doc('#addon-validator-suite')
         assert suite.attr('data-validateurl') == (
-            reverse('devhub.standalone_upload_detail', args=[upload.uuid]))
+            reverse('devhub.standalone_upload_detail', args=[str(upload.uuid)]))
 
     @mock.patch('olympia.devhub.tasks.run_validator')
     def check_excluded_platforms(self, xpi, platforms, v):
@@ -2274,7 +2274,7 @@ class TestUploadDetail(BaseUploadTest):
         self.upload_file(xpi)
         upload = FileUpload.objects.get()
         r = self.client.get(reverse('devhub.upload_detail',
-                                    args=[upload.uuid, 'json']))
+                                    args=[str(upload.uuid), 'json']))
         assert r.status_code == 200
         data = json.loads(r.content)
         assert sorted(data['platforms_to_exclude']) == sorted(platforms)
@@ -2331,7 +2331,7 @@ class TestUploadDetail(BaseUploadTest):
         self.upload_file('unopenable.xpi')
         upload = FileUpload.objects.get()
         r = self.client.get(reverse('devhub.upload_detail',
-                                    args=[upload.uuid, 'json']))
+                                    args=[str(upload.uuid), 'json']))
         data = json.loads(r.content)
         message = [(m['message'], m.get('fatal', False))
                    for m in data['validation']['messages']]
@@ -2345,7 +2345,7 @@ class TestUploadDetail(BaseUploadTest):
         self.upload_file('../../../files/fixtures/files/experiment.xpi')
         upload = FileUpload.objects.get()
         response = self.client.get(reverse('devhub.upload_detail',
-                                           args=[upload.uuid, 'json']))
+                                           args=[str(upload.uuid), 'json']))
         data = json.loads(response.content)
         assert data['validation']['messages'] == []
 
@@ -2355,7 +2355,7 @@ class TestUploadDetail(BaseUploadTest):
         self.upload_file('../../../files/fixtures/files/experiment.xpi')
         upload = FileUpload.objects.get()
         response = self.client.get(reverse('devhub.upload_detail',
-                                           args=[upload.uuid, 'json']))
+                                           args=[str(upload.uuid), 'json']))
         data = json.loads(response.content)
         assert data['validation']['messages'] == [
             {u'tier': 1, u'message': u'You cannot submit this type of add-on',

@@ -316,31 +316,6 @@ def send_html_mail_jinja(subject, html_template, text_template, context,
     return msg
 
 
-class JSONEncoder(json.DjangoJSONEncoder):
-
-    def default(self, obj):
-        from olympia.versions.models import ApplicationsVersions
-
-        unicodable = (Translation, Promise)
-
-        if isinstance(obj, unicodable):
-            return unicode(obj)
-        if isinstance(obj, ApplicationsVersions):
-            return {unicode(amo.APP_IDS[obj.application].pretty): {
-                'min': unicode(obj.min), 'max': unicode(obj.max)}}
-
-        return super(JSONEncoder, self).default(obj)
-
-
-class DecimalJSONEncoder(json.DjangoJSONEncoder):
-
-    def default(self, obj):
-        if isinstance(obj, decimal.Decimal):
-            return float(obj)
-
-        return super(DecimalJSONEncoder, self).default(obj)
-
-
 def chunked(seq, n):
     """
     Yield successive n-sized chunks from seq.

@@ -21,6 +21,7 @@ import commonware.log
 from django_extensions.db.fields.json import JSONField
 from django_statsd.clients import statsd
 from jinja2.filters import do_dictsort
+from rest_framework.utils.encoders import JSONEncoder
 
 from olympia import amo
 from olympia.amo.models import (
@@ -31,7 +32,7 @@ from olympia.addons.utils import (
 from olympia.amo import helpers
 from olympia.amo.decorators import use_master, write
 from olympia.amo.utils import (
-    attach_trans_dict, cache_ns_key, chunked, JSONEncoder,
+    attach_trans_dict, cache_ns_key, chunked,
     no_translation, send_mail, slugify, sorted_groupby, timer, to_language,
     urlparams, find_language)
 from olympia.amo.urlresolvers import get_outgoing_url, reverse

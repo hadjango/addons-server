@@ -20,6 +20,7 @@ import jingo
 import waffle
 from caching.base import cached_with
 from jingo import get_standard_processors
+from rest_framework.utils.encoders import JSONEncoder
 
 from olympia import amo, legacy_api
 from olympia.addons.models import Addon, CompatOverride
@@ -27,7 +28,6 @@ from olympia.amo.decorators import (
     allow_cross_site_request, json_view)
 from olympia.amo.models import manual_order
 from olympia.amo.urlresolvers import get_url_prefix
-from olympia.amo.utils import JSONEncoder
 from olympia.legacy_api.utils import addon_to_dict, extract_filters
 from olympia.search.views import (
     AddonSuggestionsAjax, PersonaSuggestionsAjax, name_query)
