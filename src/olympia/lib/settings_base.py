@@ -274,7 +274,10 @@ JINGO_EXCLUDE_PATHS = (
     'editors/emails',
     'amo/emails',
     'devhub/email/revoked-key-email.ltxt',
-    'devhub/email/new-key-email.ltxt'
+    'devhub/email/new-key-email.ltxt',
+
+    # Django specific templates
+    'registration/password_reset_subject.txt'
 )
 
 TEMPLATES = [
