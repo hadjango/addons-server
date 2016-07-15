@@ -746,11 +746,19 @@ class ESTestCase(TestCase):
     index_names = {key: timestamp_index(value)
                    for key, value in settings.ES_INDEXES.items()}
 
+
     @classmethod
     def setUpClass(cls):
         cls.es = amo_search.get_es(timeout=settings.ES_TIMEOUT)
-
+        cls._SEARCH_ANALYZER_MAP = amo.SEARCH_ANALYZER_MAP
+        amo.SEARCH_ANALYZER_MAP = {
+            'english': ['en-us'],
+            'spanish': ['es'],
+        }
         super(ESTestCase, cls).setUpClass()
+
+    @classmethod
+    def setUpTestData(cls):
         try:
             cls.es.cluster.health()
         except Exception, e:
@@ -760,11 +768,6 @@ class ESTestCase(TestCase):
                 list(e.args[1:]))
             raise
 
-        cls._SEARCH_ANALYZER_MAP = amo.SEARCH_ANALYZER_MAP
-        amo.SEARCH_ANALYZER_MAP = {
-            'english': ['en-us'],
-            'spanish': ['es'],
-        }
         aliases_and_indexes = set(settings.ES_INDEXES.values() +
                                   cls.es.indices.get_aliases().keys())
         for key in aliases_and_indexes:
@@ -787,6 +790,7 @@ class ESTestCase(TestCase):
                      'alias': settings.ES_INDEXES['stats']}}
         ]
         cls.es.indices.update_aliases({'actions': actions})
+        super(ESTestCase, cls).setUpTestData()
 
     @classmethod
     def tearDownClass(cls):
@@ -822,8 +826,8 @@ class ESTestCase(TestCase):
 class ESTestCaseWithAddons(ESTestCase):
 
     @classmethod
-    def setUp(cls):
-        super(ESTestCaseWithAddons, cls).setUpClass()
+    def setUpTestData(cls):
+        super(ESTestCaseWithAddons, cls).setUpTestData()
         # Load the fixture here, to not be overloaded by a child class'
         # fixture attribute.
         call_command('loaddata', 'addons/base_es')
@@ -836,7 +840,7 @@ class ESTestCaseWithAddons(ESTestCase):
         cls.refresh()
 
     @classmethod
-    def tearDown(cls):
+    def tearDownClass(cls):
         try:
             unindex_addons([a.id for a in cls._addons])
             cls._addons = []
