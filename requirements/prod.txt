@@ -1,9 +1,9 @@
 -r compiled.txt
 
 # Django is required by django-aesfield, django-cache-nuggets, django-mozilla-product-details, django-tables2, nobot
-Django==1.8.13 \
-    --hash=sha256:dad5da0cd7f3cca7da3ac42a19abba30f5cc10fae4976e474051e7085b4e95d1 \
-    --hash=sha256:128e8bdc11c69ea90f778435d38126453d3bf283dbd28cf15a33aa8e52245df4
+Django==1.8.14 \
+    --hash=sha256:1716747f7e0fbee6e2c1c0bcdb74307139d441a79eb4dcc97d206c615e1ded15 \
+    --hash=sha256:5282c48b90fbb29507299f592215378e849a2808f485e4144626e66715d5464d
 GitPython==0.1.7 \
     --hash=sha256:03754bc7b256397c1b646e5048e2291590f5080171adb8b00f4e2d7384c76eee
 MySQL-python==1.2.5 \
