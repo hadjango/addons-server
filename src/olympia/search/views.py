@@ -2,7 +2,7 @@ from django import http
 from django.db.models import Q
 from django.db.transaction import non_atomic_requests
 from django.utils import translation
-from django.utils.encoding import smart_str
+from django.utils.encoding import force_bytes
 from django.utils.translation import ugettext as _
 from django.views.decorators.vary import vary_on_headers
 
@@ -600,7 +600,7 @@ def tag_sidebar(request, form_data, aggregations):
 
 
 def fix_search_query(query, extra_params=None):
-    rv = dict((smart_str(k), v) for k, v in query.items())
+    rv = dict((force_bytes(k), v) for k, v in query.items())
     changed = False
     # Change old keys to new names.
     keys = {

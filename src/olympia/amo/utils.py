@@ -26,7 +26,7 @@ from django.core.validators import validate_slug, ValidationError
 from django.forms.fields import Field
 from django.template import Context, loader
 from django.utils import translation
-from django.utils.encoding import smart_str, smart_unicode, force_text
+from django.utils.encoding import force_bytes, force_text
 from django.utils.http import urlquote, urlunquote
 
 import bleach
@@ -72,7 +72,7 @@ def urlparams(url_, hash=None, **query):
 
     # Use dict(parse_qsl) so we don't get lists of values.
     q = url.query
-    query_dict = dict(urlparse.parse_qsl(smart_str(q))) if q else {}
+    query_dict = dict(urlparse.parse_qsl(force_bytes(q))) if q else {}
     query_dict.update((k, v) for k, v in query.items())
 
     query_string = urlencode([(k, urlunquote(v)) for k, v in query_dict.items()
@@ -335,7 +335,7 @@ def urlencode(items):
     try:
         return urllib.urlencode(items)
     except UnicodeEncodeError:
-        return urllib.urlencode([(k, smart_str(v)) for k, v in items])
+        return urllib.urlencode([(k, force_bytes(v)) for k, v in items])
 
 
 def randslice(qs, limit, exclude=None):
@@ -668,8 +668,8 @@ class ESPaginator(paginator.Paginator):
 def smart_path(string):
     """Returns a string you can pass to path.path safely."""
     if os.path.supports_unicode_filenames:
-        return smart_unicode(string)
-    return smart_str(string)
+        return force_text(string)
+    return force_bytes(string)
 
 
 @contextlib.contextmanager
@@ -693,7 +693,7 @@ def escape_all(v, linkify_only_full=False):
 
     """
     if isinstance(v, basestring):
-        v = jinja2.escape(smart_unicode(v))
+        v = jinja2.escape(force_text(v))
         v = linkify_with_outgoing(v, only_full=linkify_only_full)
         return v
     elif isinstance(v, list):
@@ -703,7 +703,7 @@ def escape_all(v, linkify_only_full=False):
         for k, lv in v.iteritems():
             v[k] = escape_all(lv, linkify_only_full=linkify_only_full)
     elif isinstance(v, Translation):
-        v = jinja2.escape(smart_unicode(v.localized_string))
+        v = jinja2.escape(force_text(v))
     return v
 
 
@@ -754,8 +754,8 @@ class LocalFileStorage(FileSystemStorage):
 
     def _smart_path(self, string):
         if os.path.supports_unicode_filenames:
-            return smart_unicode(string)
-        return smart_str(string)
+            return force_text(string)
+        return force_bytes(string)
 
 
 def translations_for_field(field):

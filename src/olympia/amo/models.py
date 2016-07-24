@@ -3,7 +3,8 @@ import threading
 
 from django.conf import settings
 from django.db import models, transaction
-from django.utils import encoding, translation
+from django.utils import translation
+from django.utils.encoding import force_text
 
 import caching.base
 import elasticsearch
@@ -343,7 +344,7 @@ class ModelBase(SearchMixin, caching.base.CachingMixin, models.Model):
         need it and it avoids invalidation bugs with FETCH_BY_ID.
         """
         key_parts = ('o', cls._meta, pk, 'default')
-        return ':'.join(map(encoding.smart_unicode, key_parts))
+        return ':'.join(map(force_text, key_parts))
 
     def reload(self):
         """Reloads the instance from the database."""

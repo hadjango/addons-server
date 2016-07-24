@@ -1,6 +1,6 @@
 from django.db import connections, models, router
 from django.db.models.deletion import Collector
-from django.utils import encoding
+from django.utils.encoding import force_text
 from django.utils.functional import Promise
 
 import bleach
@@ -117,7 +117,7 @@ class Translation(ModelBase, Promise):
         # Like in ModelBase, we avoid putting the real db in the key because it
         # does us more harm than good.
         key_parts = ('o', 'translations.translation', pk, 'default')
-        return ':'.join(map(encoding.smart_unicode, key_parts))
+        return ':'.join(map(force_text, key_parts))
 
     @classmethod
     def new(cls, string, locale, id=None):

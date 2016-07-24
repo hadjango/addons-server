@@ -13,7 +13,7 @@ from django.core.files.storage import default_storage as storage
 from django.db import models
 from django.dispatch import receiver
 from django.template.defaultfilters import slugify
-from django.utils.encoding import smart_str, force_text
+from django.utils.encoding import force_bytes, force_text
 
 import commonware
 from cache_nuggets.lib import memoize
@@ -127,7 +127,8 @@ class File(OnChangeMixin, ModelBase):
         else:
             host = user_media_url('addons')
 
-        return posixpath.join(*map(smart_str, [host, addon.id, self.filename]))
+        return posixpath.join(
+            *map(force_bytes, [host, addon.id, self.filename]))
 
     def get_url_path(self, src):
         return self._make_download_url('downloads.file', src)
@@ -322,7 +323,8 @@ class File(OnChangeMixin, ModelBase):
                 log.info(msg % (src, dst))
                 move_stored_file(src, dst)
         except UnicodeEncodeError:
-            log.error('Move Failure: %s %s' % (smart_str(src), smart_str(dst)))
+            msg = 'Move Failure: %s %s' % (force_bytes(src), force_bytes(dst))
+            log.error(msg)
 
     def hide_disabled_file(self):
         """Move a disabled file to the guarded file path."""
@@ -332,10 +334,10 @@ class File(OnChangeMixin, ModelBase):
         self.mv(src, dst, 'Moving disabled file: %s => %s')
         # Remove the file from the mirrors if necessary.
         if (self.mirror_file_path and
-                storage.exists(smart_str(self.mirror_file_path))):
+                storage.exists(force_bytes(self.mirror_file_path))):
             log.info('Unmirroring disabled file: %s'
                      % self.mirror_file_path)
-            storage.delete(smart_str(self.mirror_file_path))
+            storage.delete(force_bytes(self.mirror_file_path))
 
     def unhide_disabled_file(self):
         if not self.filename:
@@ -366,8 +368,8 @@ class File(OnChangeMixin, ModelBase):
                 copy_stored_file(self.file_path, dst)
         except UnicodeEncodeError:
             log.info('Copy Failure: %s %s %s' %
-                     (self.id, smart_str(self.filename),
-                      smart_str(self.file_path)))
+                     (self.id, force_bytes(self.filename),
+                      force_bytes(self.file_path)))
 
     _get_localepicker = re.compile('^locale browser ([\w\-_]+) (.*)$', re.M)
 
@@ -586,7 +588,7 @@ class FileUpload(ModelBase):
     def add_file(self, chunks, filename, size):
         if not self.uuid:
             self.uuid = self._meta.get_field('uuid')._create_uuid().hex
-        filename = smart_str(u'{0}_{1}'.format(self.uuid, filename))
+        filename = force_bytes(u'{0}_{1}'.format(self.uuid, filename))
         loc = os.path.join(user_media_path('addons'), 'temp', uuid.uuid4().hex)
         base, ext = os.path.splitext(smart_path(filename))
         is_crx = False
