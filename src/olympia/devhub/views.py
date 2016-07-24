@@ -613,7 +613,7 @@ def handle_upload(filedata, user, app_id=None, version_id=None, addon=None,
 
     upload = FileUpload.from_post(filedata, filedata.name, filedata.size,
                                   automated_signing=automated, addon=addon)
-    log.info('FileUpload created: %s' % upload.uuid)
+    log.info('FileUpload created: %s' % upload.uuid.hex)
     if user.is_authenticated():
         upload.user = user
         upload.save()
@@ -644,11 +644,11 @@ def upload(request, addon=None, is_standalone=False, is_listed=True,
         is_listed=is_listed, automated=automated)
     if addon:
         return redirect('devhub.upload_detail_for_addon',
-                        addon.slug, upload.uuid)
+                        addon.slug, upload.uuid.hex)
     elif is_standalone:
-        return redirect('devhub.standalone_upload_detail', upload.uuid)
+        return redirect('devhub.standalone_upload_detail', upload.uuid.hex)
     else:
-        return redirect('devhub.upload_detail', upload.uuid, 'json')
+        return redirect('devhub.upload_detail', upload.uuid.hex, 'json')
 
 
 @post_required
@@ -858,10 +858,10 @@ def upload_validation_context(request, upload, addon_slug=None, addon=None,
     if not url:
         if addon:
             url = reverse('devhub.upload_detail_for_addon',
-                          args=[addon.slug, upload.uuid])
+                          args=[addon.slug, upload.uuid.hex])
         else:
-            url = reverse('devhub.upload_detail', args=[upload.uuid, 'json'])
-    full_report_url = reverse('devhub.upload_detail', args=[upload.uuid])
+            url = reverse('devhub.upload_detail', args=[upload.uuid.hex, 'json'])
+    full_report_url = reverse('devhub.upload_detail', args=[upload.uuid.hex])
 
     validation = upload.processed_validation or ''
 
@@ -870,7 +870,7 @@ def upload_validation_context(request, upload, addon_slug=None, addon=None,
         validation.get('metadata', {}).get(
             'processed_by_addons_linter', False))
 
-    return {'upload': upload.uuid,
+    return {'upload': upload.uuid.hex,
             'validation': validation,
             'error': None,
             'url': url,
@@ -897,7 +897,7 @@ def upload_detail(request, uuid, format='html'):
     upload = get_object_or_404(FileUpload, uuid=uuid)
 
     validate_url = reverse('devhub.standalone_upload_detail',
-                           args=[upload.uuid])
+                           args=[upload.uuid.hex])
 
     if upload.compat_with_app:
         return _compat_result(request, validate_url,
