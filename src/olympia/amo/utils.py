@@ -26,7 +26,7 @@ from django.core.validators import validate_slug, ValidationError
 from django.forms.fields import Field
 from django.template import Context, loader
 from django.utils import translation
-from django.utils.encoding import smart_str, smart_unicode
+from django.utils.encoding import smart_str, smart_unicode, force_text
 from django.utils.http import urlquote, urlunquote
 
 import bleach
@@ -367,7 +367,8 @@ def slugify(s, ok=SLUG_OK, lower=True, spaces=False, delimiter='-'):
     # L and N signify letter/number.
     # http://www.unicode.org/reports/tr44/tr44-4.html#GC_Values_Table
     rv = []
-    for c in smart_unicode(s):
+
+    for c in force_text(s):
         cat = unicodedata.category(c)[0]
         if cat in 'LN' or c in ok:
             rv.append(c)
