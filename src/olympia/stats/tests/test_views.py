@@ -314,14 +314,14 @@ class TestCSVs(ESStatsTest):
         self.url_args = {'start': '20200101', 'end': '20200130', 'addon_id': 4}
         response = self.get_view_response('stats.versions_series', head=True,
                                           group='day', format='csv')
-        expected = 'no-cache, must-revalidate, max-age=0, no-store'
-        assert response["cache-control"] == expected
+        expected = ('max-age=0,', 'must-revalidate,', 'no-cache,', 'no-store')
+        assert sorted(response["cache-control"].split()) == expected
 
         self.url_args = {'start': '20200101', 'end': '20200130', 'addon_id': 4}
         response = self.get_view_response('stats.versions_series', head=True,
                                           group='day', format='json')
-        expected = 'no-cache, must-revalidate, max-age=0, no-store'
-        assert response["cache-control"] == expected
+        expected = ('max-age=0,', 'must-revalidate,', 'no-cache,', 'no-store')
+        assert sorted(response["cache-control"].split()) == expected
 
     def test_usage_series_no_data(self):
         url_args = [
