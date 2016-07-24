@@ -5,7 +5,7 @@ from olympia import amo
 from olympia.amo.models import SearchMixin
 from olympia.amo.tests import addon_factory, ESTestCase, file_factory, TestCase
 from olympia.addons.models import (
-    Addon, attach_categories, attach_tags, attach_translations)
+    Addon, attach_categories, attach_tags, attach_translations, Preview)
 from olympia.addons.indexers import AddonIndexer
 from olympia.constants.applications import FIREFOX
 from olympia.constants.platforms import PLATFORM_ALL, PLATFORM_MAC
@@ -46,8 +46,8 @@ class TestAddonIndexer(TestCase):
         complex_fields = [
             'app', 'appversion', 'authors', 'boost', 'category',
             'current_version', 'description', 'has_theme_rereview',
-            'has_version', 'name', 'name_sort', 'platforms', 'public_stats',
-            'summary', 'tags',
+            'has_version', 'listed_authors', 'name', 'name_sort', 'platforms',
+            'previews', 'public_stats', 'ratings', 'summary', 'tags',
         ]
 
         # Fields that need to be present in the mapping, but might be skipped
@@ -146,7 +146,13 @@ class TestAddonIndexer(TestCase):
         assert extracted['boost'] == self.addon.average_daily_users ** .2 * 4
         assert extracted['category'] == [22, 23, 24]  # From fixture.
         assert extracted['has_theme_rereview'] is None
+        assert extracted['listed_authors'] == [
+            {'name': u'55021 التطب', 'id': 55021, 'username': '55021'}]
         assert extracted['platforms'] == [PLATFORM_ALL.id]
+        assert extracted['ratings'] == {
+            'average': self.addon.average_rating,
+            'count': self.addon.total_reviews,
+        }
         assert extracted['tags'] == []
 
     def test_extract_version_and_files(self):
@@ -230,6 +236,30 @@ class TestAddonIndexer(TestCase):
         self.addon = addon_factory(persona_id=0, type=amo.ADDON_PERSONA)
         extracted = self._extract()
         assert extracted['persona']['is_new'] is True  # No persona_id.
+
+    def test_extract_previews(self):
+        second_preview = Preview.objects.create(
+            addon=self.addon, position=2,
+            caption={'en-US': u'My câption', 'fr': u'Mön tîtré'})
+        first_preview = Preview.objects.create(addon=self.addon, position=1)
+        first_preview.reload()
+        second_preview.reload()
+        extracted = self._extract()
+        assert extracted['previews']
+        assert len(extracted['previews']) == 2
+        assert extracted['previews'][0]['id'] == first_preview.pk
+        assert extracted['previews'][0]['modified'] == first_preview.modified
+        assert extracted['previews'][0]['caption_translations'] == []
+        assert extracted['previews'][1]['id'] == second_preview.pk
+        assert extracted['previews'][1]['modified'] == second_preview.modified
+        assert extracted['previews'][1]['caption_translations'] == [
+            {'lang': 'en-US', 'string': u'My câption'},
+            {'lang': 'fr', 'string': u'Mön tîtré'}]
+
+        # Only raw translations dict should exist, since we don't need the
+        # to search against preview captions.
+        assert 'caption' not in extracted['previews'][0]
+        assert 'caption' not in extracted['previews'][1]
 
 
 class TestAddonIndexerWithES(ESTestCase):

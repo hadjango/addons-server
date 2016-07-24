@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: addons\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
 "POT-Creation-Date: 2016-07-05 13:42+0000\n"
-"PO-Revision-Date: 2016-07-18 18:41+0000\n"
+"PO-Revision-Date: 2016-07-23 20:39+0000\n"
 "Last-Translator: Balázs Meskó <meskobalazs@gmail.com>\n"
 "Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
 "Language: hu\n"
@@ -5757,12 +5757,16 @@ msgid ""
 "If a version does not meet the criteria for full review, it can either be granted preliminary review or disabled if there is a security concern. The author will receive an email explaining the "
 "action taken and how to fix it. In most cases, the developer can simply fix the problem and re-submit for full review."
 msgstr ""
+"Ha a teljes értékelés feltételeinek nem felel meg egy verzió, akkor előzetes értékelést kaphat, vagy le is tilthatják ha a biztonsága kérdéses. A szerző a megtett intézkedésekről és a javítási "
+"lehetőségekről egy e-mailt fog kapni. A legtöbb esetben a fejlesztő egyszerűen megoldhatja a problémát, és újra benyújthatja vizsgálatra."
 
 #: src/olympia/devhub/templates/devhub/docs/policies-reviews.html
 msgid ""
 "Preliminary reviews are appropriate for experimental add-ons and provide a way to get user testing and feedback without going through the longer, more thorough review process. We aim to complete "
 "these reviews in under 3 days."
 msgstr ""
+"Az előzetes értékelés kísérleti kiegészítőkhöz megfelelő, és módot ad a felhasználói tesztelésre és visszajelzésre a hosszabb, alaposabb értékelési folyamat helyett. Célunk, hogy ezen értékelések 3 "
+"napnál rövidebb idő alatt megtörténjenek."
 
 #: src/olympia/devhub/templates/devhub/docs/policies-reviews.html
 msgid "Testing Methods"
@@ -5773,6 +5777,8 @@ msgid ""
 "When performing a preliminary review, editors will review the source code for security issues and major policy violations, but will not install the add-on to test functionality in most cases. "
 "Preliminary review will be granted unless a security vulnerability or major policy violation is discovered."
 msgstr ""
+"Előzetes értékelés végrehajtásakor a szerkesztők felülvizsgálják a forráskódot biztonsági kérdések és a fő irányelvek megsértése szempontjából, de nem telepítik fel a bővítményt a funkciók "
+"teszteléséhez. Az előzetes értékelés megadásra kerül, kivéve ha biztonsági réseket fedeznek fel, vagy a főbb irányelvek megsértése áll fenn."
 
 #: src/olympia/devhub/templates/devhub/docs/policies-reviews.html
 msgid ""
@@ -5780,16 +5786,21 @@ msgid ""
 "have caution stripes and a notice that the add-on is experimental and not fully reviewed by Mozilla, though no click-through is required. Additionally, these add-ons cannot use the voluntary "
 "contributions and beta channel features."
 msgstr ""
+"Az előzetes értékelés végeztével a kiegészítő azonnal elérhető lesz a galériában, böngészési és keresési eredményekben, de lentebb sorolva, mint a teljes értékelésen átesett kiegészítők. A "
+"telepítőgombok figyelmeztető csíkokkal jelennek meg, és egy értesítéssel, hogy a kiegészítő kísérleti és nem esett át teljes értékelésen, bár továbbkattintás nem szükséges. Ezenkívűl ezek a "
+"kiegészítők nem használhatják az önkéntes hozzájárulásokat, és a béta csatorna funkciókat."
 
 #: src/olympia/devhub/templates/devhub/docs/policies-reviews.html
 msgid "After being granted preliminary review, Mozilla may later revoke the review if other serious problems are reported to us by users."
-msgstr ""
+msgstr "Az előzetes értékelés megadása után, a Mozilla később visszavonhatja ezt, ha a felhasználók komoly gondot jelentenének."
 
 #: src/olympia/devhub/templates/devhub/docs/policies-reviews.html
 msgid ""
 "Subsequent versions of the add-on will automatically be placed in the preliminary review queue. Until the review is completed, the new version will only be displayed on the Version History page of "
 "the add-on. Once reviewed, the version will be updated across the site and deployed through the automatic update service."
 msgstr ""
+"Egy kiegészítő egymást követő verziói automatikusan az előzetes értékelés várakozási sorába kerülnek. Az értékelés végeztéig az új verziók csak a kiegészítő Verziótörténet oldalán jelennek meg. "
+"Értékelés után a verzió a teljes oldalon és az automatikus frissítésen keresztül is frissül."
 
 #: src/olympia/devhub/templates/devhub/docs/policies-reviews.html
 msgid "Policies on Specific Add-on Practices"
@@ -5860,14 +5871,22 @@ msgid ""
 "in dialog must clearly state the name of the add-on requesting the change.</li> <li>Uninstalling the add-on restores the user's original settings if they were changed.</li> </ul> <p>*Unexpected "
 "features are those that are unrelated to the add-on's primary function.</p>"
 msgstr ""
+"<p> Ha egy kiegészítő váratlan* elemet tartalmaz, mely </p> <ul> <li> veszélyezteti a felhasználó magánszféráját vagy a biztonságát (például harmadik feleknek adatot küld), </li> <li> "
+"alapbeállításokat változtat meg, mint a kezdőoldal vagy a kereső, vagy </li> <li>beállításokat vagy tulajdonságokat változtat meg más kiegészítőkben, vagy teljesen kikapcsolja azokat</li> </ul> <p> "
+"a tulajdonságoknak a következőket kell teljesíteniük: </p> <ul> <li> A kiegészítő leírásának pontosan meg kell mondania milyen változtatásokat hajt végre. </li> <li> Minden változtatásnak "
+"választhatónak kell lennie, azaz a változtatás nem lehet alapbeállítás.</li> <li> A választhatósági párbeszédablaknak világosan tartalmaznia kell a változtatást kérő kiegészítő nevét. </li> <li> A "
+"kiegészítő eltávolításakor vissza kell állítania a felhasználó eredeti beállításait, ha azokat megváltoztatta.</li> </ul> <p> *Váratlan funkciók, melyek nincsenek kapcsolatban a kiegészítő "
+"elsődleges céljával. </p>"
 
 #: src/olympia/devhub/templates/devhub/docs/policies-reviews.html
 msgid "These features cannot be introduced into an update of a fully-reviewed add-on; the opt-in change process must be part of the initial review."
-msgstr ""
+msgstr "Ezek a funkciók nem illeszthetők be egy teljesen értékelt kiegészítő frissítésébe; a választható változtatás folyamata az eredeti értékelés része kell legyen."
 
 #: src/olympia/devhub/templates/devhub/docs/policies-reviews.html
 msgid "These are minimum requirements and not a guarantee that the add-on will be approved. This section applies to all add-ons hosted on the site, including preliminarily reviewed add-ons."
 msgstr ""
+"Ezek minimumkövetelmények és nem jelentenek garanciát a kiegészítő elfogadására. Ez a szakasz minden az oldalon kiszolgált kiegészítőre vonatkozik, beleértve az előzetes értékelésen átesett "
+"kiegészítőket is."
 
 #: src/olympia/devhub/templates/devhub/docs/policies-reviews.html
 msgid "Private Browsing Mode"
@@ -5878,6 +5897,8 @@ msgid ""
 "Add-ons that store or otherwise handle browsing data must support <a href=\"https://developer.mozilla.org/En/Supporting_private_browsing_mode\">Private Browsing Mode</a>. During a Private Browsing "
 "session, no browsing data can be written to disk, and all of this data must be cleared when Firefox quits or the Private Browsing session ends."
 msgstr ""
+"Azoknak a kiegészítők, amelyek böngészési adatokat tárolnak vagy más módon kezelnek, támogatniuk kell a <a href=\"https://developer.mozilla.org/En/Supporting_private_browsing_mode\">Privát "
+"böngészést</a>. A privát böngészési munkamenet alatt nem lehet böngészési adatokat kiírni a lemezre, és minden ilyen adatot törölni kell a Firefox bezárásakor, vagy a privát böngészés befejeztével."
 
 #: src/olympia/devhub/templates/devhub/docs/policies-reviews.html
 msgid "Binary Components & Obfuscated Code"
@@ -6034,19 +6055,19 @@ msgstr "Kiegészítője karbantartása"
 
 #: src/olympia/devhub/templates/devhub/docs/policies.html
 msgid "Mozilla is committed to ensuring a great add-ons experience for our users and developers. Please review the policies below before submitting your add-on."
-msgstr ""
+msgstr "A Mozilla elkötelezett az iránt, hogy a felhasználók és a fejlesztők nagyszerű élményt kapjanak a kiegészítőkkel. Tekintse át a lenti irányelveket, mielőtt beküldené a kiegészítőjét."
 
 #: src/olympia/devhub/templates/devhub/docs/policies.html
 msgid "Find out what is expected of add-ons we host and our policies on specific add-on practices."
-msgstr ""
+msgstr "Tudja meg mi várt az általunk kiszolgált kiegészítőktől, és az irányelveinket bizonyos gyakorlatokkal kapcsolatban."
 
 #: src/olympia/devhub/templates/devhub/docs/policies.html
 msgid "What happens after your add-on is submitted? Learn about how our Editors review submissions."
-msgstr ""
+msgstr "Mi történik a kiegészítő beküldése után? Tudja meg hogy szerkesztőink hogyan értékelik a beküldéseket."
 
 #: src/olympia/devhub/templates/devhub/docs/policies.html
 msgid "Add-on updates, transferring ownership, user reviews, and what to expect once your add-on is approved."
-msgstr ""
+msgstr "Kiegészítőfrissítések, tulajdonjog átadása, felhasználói értékelések, és hogy mit várunk el, miután a kiegészítő értékelésre került."
 
 #: src/olympia/devhub/templates/devhub/docs/policies.html
 msgid "How up-and-coming add-ons become featured and what&#039;s involved in the process."
@@ -9308,12 +9329,12 @@ msgstr "Kérdésem van"
 #: src/olympia/pages/templates/pages/about.lhtml
 #, python-format
 msgid "A good place to start is our <a href=\"%(faq_url)s\"><abbr title=\"Frequently Asked Questions\">FAQ</abbr></a>. If you don't find an answer there, you can <a href=\"%(forum_url)s\"> ask on our forums</a>."
-msgstr ""
+msgstr "Jó kezdés a <a href=\"%(faq_url)s\"><abbr title=\"Gyakran ismételt kérdések\">GYIK</abbr></a>. Ha nem találja meg a választ ott, akkor <a href=\"%(forum_url)s\">felteheti kérdését a fórumokon</a>."
 
 #: src/olympia/pages/templates/pages/about.lhtml
 #, python-format
 msgid "If you really need to contact someone from the Mozilla team, please see our <a href=\"%(url)s\"> contact information</a> page."
-msgstr ""
+msgstr "Ha tényleg kapcsolatba akar lépni valakivel a Mozilla csapatából, akkor keresse fel a <a href=\"%(url)s\">kapcsolatinformációk</a> oldalt."
 
 #: src/olympia/pages/templates/pages/about.lhtml
 msgid "Who works on this website?"
@@ -9325,6 +9346,8 @@ msgid ""
 "Over the years, many people have contributed to this website, including both volunteers from the community and a dedicated AMO team. A list of significant contributors can be found on our <a "
 "href=\"%(url)s\"> Site Credits</a> page."
 msgstr ""
+"Az évek során sok ember közreműködött ezen a weboldalon, köztük a közösség önkéntesei és az elkötelezett AMO csapat. A jelentős közreműködők listája megtalálható a <a href=\"%(url)s\">Köszönet</a> "
+"oldalunkon."
 
 #: src/olympia/pages/templates/pages/acr_firstrun.html
 msgid "Add-on Compatibility Reporter"
@@ -9332,15 +9355,15 @@ msgstr "Kiegészítő kompatibilitás jelentő"
 
 #: src/olympia/pages/templates/pages/acr_firstrun.html
 msgid "Add-on Compatibility Reporter has been installed"
-msgstr "Kiegészítő kompatibilitás jelentő települt"
+msgstr "A kiegészítő kompatibilitás jelentő települt"
 
 #: src/olympia/pages/templates/pages/acr_firstrun.html
 msgid "It’s easy to help us make sure add-ons are updated in time for the release of the next version of Firefox."
-msgstr ""
+msgstr "Könnyű segítenie abban, hogy a Firefox következő verziójának megjelenése előtt idejében frissüljenek a kiegészítők."
 
 #: src/olympia/pages/templates/pages/acr_firstrun.html
 msgid "Here’s how to get started reporting add-on compatibility:"
-msgstr ""
+msgstr "Itt van hogyan kell nekikezdenie a kiegészítők kompatibilitási jelentéséhez:"
 
 #: src/olympia/pages/templates/pages/acr_firstrun.html
 msgid ""
@@ -9851,11 +9874,11 @@ msgstr ""
 
 #: src/olympia/pages/templates/pages/dev_faq.html
 msgid "How long will it take for my add-on to be reviewed?"
-msgstr ""
+msgstr "Meddig fog tartani a bővítménye értékelése?"
 
 #: src/olympia/pages/templates/pages/dev_faq.html
 msgid "We cannot give a time estimate as to how long it will take before an add-on is reviewed. Many factors affect the time including the:"
-msgstr ""
+msgstr "Nem tudunk pontos becslést adni hogy meddig tart a kiegészítő értékelése. Sok tényezőtől függ az ideje, többek között:"
 
 #. part of a list (<li>)
 #: src/olympia/pages/templates/pages/dev_faq.html
@@ -9865,12 +9888,12 @@ msgstr "kiegészítőbeküldések száma"
 #. part of a list (<li>)
 #: src/olympia/pages/templates/pages/dev_faq.html
 msgid "complexity of an add-on’s code"
-msgstr ""
+msgstr "a kiegészítő kódjának összetettségétől"
 
 #. part of a list (<li>)
 #: src/olympia/pages/templates/pages/dev_faq.html
 msgid "number of problem areas discovered"
-msgstr ""
+msgstr "a felfedezett problémás területek számától"
 
 #: src/olympia/pages/templates/pages/dev_faq.html
 #, python-format
@@ -9948,19 +9971,19 @@ msgstr "Jelenleg, az AMO nem biztosít módot az értékelővel való közvetlen
 
 #: src/olympia/pages/templates/pages/dev_faq.html
 msgid "Can I request that a review be removed if the review is negative?"
-msgstr ""
+msgstr "Kérhetem egy negatív értékelés eltávolítását?"
 
 #: src/olympia/pages/templates/pages/dev_faq.html
 msgid "No. We do not remove negative reviews from add-ons unless they are found to be false."
-msgstr ""
+msgstr "Nem. Nem távolítunk el kiegészítő értékeléseket, csak ha hamisnak találjuk azokat."
 
 #: src/olympia/pages/templates/pages/dev_faq.html
 msgid "Can I request that a review be removed if the review is inaccurate?"
-msgstr ""
+msgstr "Kérhetem egy értékelés eltávolítását ha az pontatlan?"
 
 #: src/olympia/pages/templates/pages/dev_faq.html
 msgid "If an author contacts us and asks for a review containing false or inaccurate information to be removed, we will review the post and consider removing it."
-msgstr ""
+msgstr "Ha egy szerző kapcsolatba lép velünk, és kéri, hogy a hamis vagy pontatlan adatokat tartalmazó értékelést távolítsuk el, akkor megvizsgáljuk a bejegyzést és az eltávolításának a lehetőségét."
 
 #: src/olympia/pages/templates/pages/dev_faq.html
 msgid ""
@@ -10488,7 +10511,7 @@ msgstr ""
 
 #: src/olympia/pages/templates/pages/review_guide.html
 msgid "How can I report a problematic review?"
-msgstr ""
+msgstr "Hogyan jelenthetek be egy problémás értékelést?"
 
 #: src/olympia/pages/templates/pages/review_guide.html
 msgid ""
@@ -10929,7 +10952,7 @@ msgstr "A verzió már létezik."
 
 #: src/olympia/signing/views.py
 msgid "Only WebExtensions are allowed to omit the GUID"
-msgstr ""
+msgstr "Csak a WebExtension-ök számára megengedett a GUID kihagyása"
 
 #: src/olympia/signing/views.py
 msgid "No uploaded file for that addon and version."

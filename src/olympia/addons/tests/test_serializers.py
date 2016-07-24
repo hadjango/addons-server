@@ -6,10 +6,10 @@ from rest_framework.test import APIRequestFactory
 
 from olympia import amo
 from olympia.amo.helpers import absolutify
-from olympia.amo.tests import addon_factory, ESTestCase, TestCase
+from olympia.amo.tests import addon_factory, ESTestCase, TestCase, user_factory
 from olympia.amo.urlresolvers import reverse
 from olympia.addons.indexers import AddonIndexer
-from olympia.addons.models import Addon, Persona
+from olympia.addons.models import Addon, AddonUser, Persona, Preview
 from olympia.addons.serializers import AddonSerializer, ESAddonSerializer
 from olympia.addons.utils import generate_addon_guid
 
@@ -22,6 +22,8 @@ class AddonSerializerOutputTestMixin(object):
 
     def test_basic(self):
         self.addon = addon_factory(
+            average_daily_users=4242,
+            average_rating=4.21,
             description=u'My Addôn description',
             file_kw={
                 'hash': 'fakehash',
@@ -38,13 +40,31 @@ class AddonSerializerOutputTestMixin(object):
             support_email=u'support@example.org',
             support_url=u'https://support.example.org/support/my-addon/',
             tags=['some_tag', 'some_other_tag'],
+            total_reviews=666,
+            weekly_downloads=2147483647,
         )
+        AddonUser.objects.create(user=user_factory(username='hidden_author'),
+                                 addon=self.addon, listed=False)
+        second_author = user_factory(
+            username='second_author', display_name=u'Secönd Author')
+        first_author = user_factory(
+            username='first_author', display_name=u'First Authôr')
+        AddonUser.objects.create(
+            user=second_author, addon=self.addon, position=2)
+        AddonUser.objects.create(
+            user=first_author, addon=self.addon, position=1)
+        second_preview = Preview.objects.create(
+            addon=self.addon, position=2,
+            caption={'en-US': u'My câption', 'fr': u'Mön tîtré'})
+        first_preview = Preview.objects.create(addon=self.addon, position=1)
 
         result = self.serialize()
         version = self.addon.current_version
         file_ = version.files.latest('pk')
 
         assert result['id'] == self.addon.pk
+
+        assert result['average_daily_users'] == self.addon.average_daily_users
 
         assert result['current_version']
         assert result['current_version']['id'] == version.pk
@@ -72,6 +92,15 @@ class AddonSerializerOutputTestMixin(object):
         assert result['current_version']['url'] == absolutify(
             version.get_url_path())
 
+        assert result['authors']
+        assert len(result['authors']) == 2
+        assert result['authors'][0] == {
+            'name': first_author.name,
+            'url': absolutify(first_author.get_url_path())}
+        assert result['authors'][1] == {
+            'name': second_author.name,
+            'url': absolutify(second_author.get_url_path())}
+
         assert result['edit_url'] == absolutify(self.addon.get_dev_url())
         assert result['default_locale'] == self.addon.default_locale
         assert result['description'] == {'en-US': self.addon.description}
@@ -81,6 +110,33 @@ class AddonSerializerOutputTestMixin(object):
         assert result['is_listed'] == self.addon.is_listed
         assert result['name'] == {'en-US': self.addon.name}
         assert result['last_updated'] == self.addon.last_updated.isoformat()
+
+        assert result['previews']
+        assert len(result['previews']) == 2
+
+        result_preview = result['previews'][0]
+        assert result_preview['id'] == first_preview.pk
+        assert result_preview['caption'] is None
+        assert result_preview['image_url'] == absolutify(
+            first_preview.image_url)
+        assert result_preview['thumbnail_url'] == absolutify(
+            first_preview.thumbnail_url)
+
+        result_preview = result['previews'][1]
+        assert result_preview['id'] == second_preview.pk
+        assert result_preview['caption'] == {
+            'en-US': u'My câption',
+            'fr': u'Mön tîtré'
+        }
+        assert result_preview['image_url'] == absolutify(
+            second_preview.image_url)
+        assert result_preview['thumbnail_url'] == absolutify(
+            second_preview.thumbnail_url)
+
+        assert result['ratings'] == {
+            'average': self.addon.average_rating,
+            'count': self.addon.total_reviews,
+        }
         assert result['public_stats'] == self.addon.public_stats
         assert result['review_url'] == absolutify(
             reverse('editors.review', args=[self.addon.pk]))
@@ -93,6 +149,8 @@ class AddonSerializerOutputTestMixin(object):
         assert set(result['tags']) == set(['some_tag', 'some_other_tag'])
         assert result['type'] == 'extension'
         assert result['url'] == absolutify(self.addon.get_url_path())
+        assert result['weekly_downloads'] == self.addon.weekly_downloads
+
         return result
 
     def test_icon_url_without_icon_type_set(self):
