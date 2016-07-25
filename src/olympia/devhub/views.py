@@ -860,7 +860,9 @@ def upload_validation_context(request, upload, addon_slug=None, addon=None,
             url = reverse('devhub.upload_detail_for_addon',
                           args=[addon.slug, upload.uuid.hex])
         else:
-            url = reverse('devhub.upload_detail', args=[upload.uuid.hex, 'json'])
+            url = reverse(
+                'devhub.upload_detail',
+                args=[upload.uuid.hex, 'json'])
     full_report_url = reverse('devhub.upload_detail', args=[upload.uuid.hex])
 
     validation = upload.processed_validation or ''
