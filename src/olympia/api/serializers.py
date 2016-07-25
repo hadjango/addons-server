@@ -60,7 +60,14 @@ class BaseESSerializer(ModelSerializer):
     def handle_date(self, value):
         if not value:
             return None
-        return datetime.strptime(value, u'%Y-%m-%dT%H:%M:%S')
+
+        # Don't be picky about microseconds here. But we get them some time
+        # so we have to support them. Maybe there's a nicer way of doing
+        # this? (cgrebs)
+        try:
+            return datetime.strptime(value, u'%Y-%m-%dT%H:%M:%S.%f')
+        except ValueError:
+            return datetime.strptime(value, u'%Y-%m-%dT%H:%M:%S')
 
     def _attach_fields(self, obj, data, field_names):
         """Attach fields to fake instance."""
