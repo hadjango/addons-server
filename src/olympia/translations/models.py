@@ -1,7 +1,6 @@
 from django.db import connections, models, router
 from django.db.models.deletion import Collector
 from django.utils.encoding import force_text
-from django.utils.functional import Promise
 
 import bleach
 import commonware.log
@@ -25,16 +24,12 @@ class TranslationManager(ManagerBase):
         qs.update(localized_string=None, localized_string_clean=None)
 
 
-class Translation(ModelBase, Promise):
+class Translation(ModelBase):
     """
     Translation model.
 
     Use :class:`translations.fields.TranslatedField` instead of a plain foreign
     key to this model.
-
-    It's a `Promise` which basically means it can be passed to a Django /
-    Django Rest Framework JSON Encoder and will be called with `unicode(obj)`
-    so we always serialize the actual string.
     """
 
     autoid = models.AutoField(primary_key=True)

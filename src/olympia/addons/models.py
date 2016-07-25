@@ -21,7 +21,6 @@ import commonware.log
 from django_extensions.db.fields.json import JSONField
 from django_statsd.clients import statsd
 from jinja2.filters import do_dictsort
-from rest_framework.utils.encoders import JSONEncoder
 
 from olympia import amo
 from olympia.amo.models import (
@@ -34,7 +33,7 @@ from olympia.amo.decorators import use_master, write
 from olympia.amo.utils import (
     attach_trans_dict, cache_ns_key, chunked,
     no_translation, send_mail, slugify, sorted_groupby, timer, to_language,
-    urlparams, find_language)
+    urlparams, find_language, AMOJSONEncoder)
 from olympia.amo.urlresolvers import get_outgoing_url, reverse
 from olympia.files.models import File
 from olympia.files.utils import (
@@ -1722,7 +1721,7 @@ class Persona(caching.CachingMixin, models.Model):
     def json_data(self):
         """Persona JSON Data for Browser/extension preview."""
         return json.dumps(self.theme_data,
-                          separators=(',', ':'), cls=JSONEncoder)
+                          separators=(',', ':'), cls=AMOJSONEncoder)
 
     def authors_other_addons(self, app=None):
         """

@@ -25,10 +25,9 @@ from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework.utils.encoders import JSONEncoder
 
 from olympia import amo
-from olympia.amo.utils import render
+from olympia.amo.utils import render, AMOJSONEncoder
 from olympia.access import acl
 from olympia.addons.decorators import addon_view_factory
 from olympia.addons.models import Addon
@@ -702,7 +701,7 @@ def render_json(request, addon, stats):
 
     # Django's encoder supports date and datetime.
     fudge_headers(response, stats)
-    json.dump(stats, response, cls=JSONEncoder)
+    json.dump(stats, response, cls=AMOJSONEncoder)
     return response
 
 

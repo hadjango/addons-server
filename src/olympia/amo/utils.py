@@ -40,6 +40,7 @@ from easy_thumbnails import processors
 from html5lib.serializer.htmlserializer import HTMLSerializer
 from jingo import get_env
 from PIL import Image
+from rest_framework.utils.encoders import JSONEncoder
 
 from olympia.amo import search
 from olympia.amo import ADDON_ICON_SIZES
@@ -907,3 +908,10 @@ def utc_millesecs_from_epoch(for_datetime=None):
     if not for_datetime:
         for_datetime = datetime.datetime.now()
     return calendar.timegm(for_datetime.utctimetuple()) * 1000
+
+
+class AMOJSONEncoder(JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, Translation):
+            return force_text(obj)
+        return super(AMOJSONEncoder, self).default(obj)
