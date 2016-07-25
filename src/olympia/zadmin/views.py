@@ -237,18 +237,7 @@ def email_preview_csv(request, topic):
 @any_permission_required([('Admin', '%'),
                           ('AdminTools', 'View'),
                           ('ReviewerAdminTools', 'View')])
-def validation_tally_csv(request, job_id):
-    resp = http.HttpResponse()
-    resp['Content-Type'] = 'text/csv; charset=utf-8'
-    resp['Content-Disposition'] = ('attachment; '
-                                   'filename=validation_tally_%s.csv'
-                                   % job_id)
-    writer = csv.writer(resp)
-    fields = ['message_id', 'message', 'long_message',
-              'type', 'addons_affected']
-    writer.writerow(fields)
-    job = ValidationJobTally(job_id)
-    keys = ['key', 'message', 'long_message', 'type', 'addons_affected']
+def validation_summary(request, job_id):
     for msg in job.get_messages():
         writer.writerow([smart_str(msg[k], encoding='utf8', strings_only=True)
                          for k in keys])
