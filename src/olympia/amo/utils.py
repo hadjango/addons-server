@@ -16,6 +16,7 @@ import urllib
 import urlparse
 
 import django.core.mail
+from django.template.context import make_context
 from django.http import HttpResponse, HttpResponseRedirect
 from django.conf import settings
 from django.core import paginator
@@ -38,7 +39,7 @@ from babel import Locale
 from django_statsd.clients import statsd
 from easy_thumbnails import processors
 from html5lib.serializer.htmlserializer import HTMLSerializer
-from jingo import get_env
+from jingo import get_env, get_standard_processors
 from PIL import Image
 from rest_framework.utils.encoders import JSONEncoder
 
@@ -52,8 +53,29 @@ from olympia.users.utils import UnsubscribeCode
 from . import logger_log as log
 
 
+def render_to_string(request, template, context=None):
+    """Render a template into a string.
+
+    This is copied and fixed from jingo.
+    """
+    def get_context():
+        c = {}
+        for processor in get_standard_processors():
+            c.update(processor(request))
+
+        if context is not None:
+            c.update(context.copy())
+        return c
+
+    # If it's not a Template, it must be a path to be loaded.
+    if not isinstance(template, jinja2.environment.Template):
+        template = get_env().get_template(template)
+
+    return template.render(get_context())
+
+
 def render(request, template, ctx=None, status=None, content_type=None):
-    rendered = jingo.render_to_string(request, template, ctx)
+    rendered = render_to_string(request, template, ctx)
     return HttpResponse(rendered, status=status, content_type=content_type)
 
 
