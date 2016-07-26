@@ -921,7 +921,7 @@ class TestRegistration(UserViewBase):
 
     def test_redirects_to_login(self):
         """Register should redirect to login."""
-        response = self.client.get(reverse('users.register'))
+        response = self.client.get(reverse('users.register'), follow=True)
         self.assert3xx(response, reverse('users.login'), status_code=301)
 
 
