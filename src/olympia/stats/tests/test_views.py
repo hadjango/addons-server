@@ -314,7 +314,6 @@ class TestCSVs(ESStatsTest):
         self.url_args = {'start': '20200101', 'end': '20200130', 'addon_id': 4}
         response = self.get_view_response('stats.versions_series', head=True,
                                           group='day', format='csv')
-        expected = ['max-age=0', 'must-revalidate', 'no-cache', 'no-store']
 
         assert (
             set(response['cache-control'].split(', ')),
