@@ -392,6 +392,10 @@ class ModelBase(SearchMixin, caching.base.CachingMixin, models.Model):
                                           created=False)
 
     def save(self, **kwargs):
+        # Unfortunately we have to save our translations before we call `save`
+        # since Django verifies m2n relations with unsaved parent relations
+        # and throws an error.
+        # https://docs.djangoproject.com/en/1.9/topics/db/examples/one_to_one/
         if hasattr(self._meta, 'translated_fields'):
             save_translations(id(self))
         return super(ModelBase, self).save(**kwargs)
