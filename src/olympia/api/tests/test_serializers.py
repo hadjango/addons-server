@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 from datetime import datetime
 
-from rest_framework import serializers
-
 from olympia.addons.models import Addon
 from olympia.api.serializers import BaseESSerializer
 

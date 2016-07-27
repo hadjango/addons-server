@@ -16,7 +16,6 @@ import urllib
 import urlparse
 
 import django.core.mail
-from django.template.context import make_context
 from django.http import HttpResponse, HttpResponseRedirect
 from django.conf import settings
 from django.core import paginator
@@ -33,7 +32,6 @@ from django.utils.http import urlquote, urlunquote
 import bleach
 import html5lib
 import jinja2
-import jingo
 import pytz
 from babel import Locale
 from django_statsd.clients import statsd
